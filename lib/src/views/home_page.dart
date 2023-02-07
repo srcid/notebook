@@ -2,6 +2,7 @@ import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
 import 'package:notebook/src/views/consumer_transactions_page.dart';
+import 'package:provider/provider.dart';
 import '../controllers/consumer_controller.dart';
 import 'package:intl/intl.dart';
 
@@ -13,7 +14,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _consumerController = ConsumerController.instance;
   final _consumersSelected = List<bool>.filled(9999, false);
   final _real = NumberFormat.currency(
     locale: 'pt_BR',
@@ -22,17 +22,9 @@ class _HomePageState extends State<HomePage> {
   );
 
   @override
-  void initState() {
-    _consumerController.addListener(() {
-      setState(() {});
-    });
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final consumers = _consumerController.consumers;
+    final consumerController = Provider.of<ConsumerController>(context);
+    final consumers = consumerController.consumers;
 
     return Scaffold(
       appBar: AppBar(
@@ -56,7 +48,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget itemBuilder(BuildContext context, int index) {
-    final consumer = _consumerController.consumers[index];
+    final consumerController = Provider.of<ConsumerController>(context);
+    final consumer = consumerController.consumers[index];
     final balanceStr = _real.format(consumer.balance * 0.01);
     final name = consumer.name;
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../controllers/consumer_controller.dart';
 
 class NewConsumerPage extends StatelessWidget {
   NewConsumerPage({super.key});
-  final _consumerController = ConsumerController.instance;
   final _textEditingController = TextEditingController();
 
   TextFormField customTextFormField(String fieldName, Icon prefixIcon) {
@@ -20,6 +20,8 @@ class NewConsumerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final consumerController = Provider.of<ConsumerController>(context);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -34,7 +36,7 @@ class NewConsumerPage extends StatelessWidget {
               style: ElevatedButton.styleFrom(minimumSize: const Size(50, 55)),
               onPressed: () {
                 final name = _textEditingController.text.trim();
-                _consumerController.add(name);
+                consumerController.add(name);
                 Navigator.of(context).pop();
               },
               child: const Text(

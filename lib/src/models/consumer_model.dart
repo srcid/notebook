@@ -1,12 +1,12 @@
-class Consumer {
+class ConsumerModel {
   int? id;
   String name;
   int balance;
 
-  Consumer(this.id, {required this.name, this.balance = 0});
+  ConsumerModel(this.id, {required this.name, this.balance = 0});
 
-  static Consumer fromJson(Map<String, Object?> consumerMap) {
-    return Consumer(
+  static ConsumerModel fromJson(Map<String, Object?> consumerMap) {
+    return ConsumerModel(
       consumerMap['id'] as int?,
       name: consumerMap['name'] as String,
       balance: consumerMap['balance'] as int,

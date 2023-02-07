@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:notebook/src/models/consumer.dart';
+import 'package:notebook/src/models/consumer_model.dart';
 
 class ConsumerTransactionPage extends StatefulWidget {
-  final Consumer consumer;
+  final ConsumerModel consumer;
   const ConsumerTransactionPage({super.key, required this.consumer});
 
   @override
