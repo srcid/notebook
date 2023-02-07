@@ -68,11 +68,6 @@ class _HomePageState extends State<HomePage> {
       onTap: () {
         Navigator.of(context)
             .pushNamed('/consumerTransactionPage', arguments: consumer);
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) =>
-        //             ConsumerTransactionPage(consumer: consumer)));
       },
       title: Text(name),
       subtitle: Text(balanceStr),
