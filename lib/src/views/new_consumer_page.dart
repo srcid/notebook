@@ -83,7 +83,7 @@ class CustomTextFormField extends StatelessWidget {
           caseSensitive: false,
           unicode: true,
         );
-        dev.log('"${value}"' ?? 'null', name: 'validate');
+        dev.log('"${value}"', name: 'validate');
         if (value != null && pattern.hasMatch(value)) {
           return null;
         }
