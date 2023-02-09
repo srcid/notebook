@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notebook/src/controllers/consumer_controller.dart';
 import 'package:notebook/src/views/consumer_transactions_page.dart';
+import 'package:notebook/src/views/new_consumer_transaction_page.dart';
 import 'package:provider/provider.dart';
 
 import 'models/consumer_model.dart';
@@ -26,6 +27,8 @@ class AppWidget extends StatelessWidget {
           routes: {
             '/': (context) => const SafeArea(child: HomePage()),
             '/add': (context) => SafeArea(child: NewConsumerPage()),
+            'addConsumerTransaction': (context) =>
+                const SafeArea(child: NewConsumerTransactionPage()),
             '/consumerTransactionPage': (context) {
               final consumer =
                   (ModalRoute.of(context)!.settings.arguments as ConsumerModel);

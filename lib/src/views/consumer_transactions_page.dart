@@ -1,68 +1,122 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:notebook/src/models/consumer_model.dart';
+import 'package:notebook/src/repository/consuemer_transaction_repository.dart';
 
-class ConsumerTransactionPage extends StatefulWidget {
+import '../models/consumer_transaction_model.dart';
+
+class ConsumerTransactionPage extends StatelessWidget {
   final ConsumerModel consumer;
+
   const ConsumerTransactionPage({super.key, required this.consumer});
 
   @override
-  State<ConsumerTransactionPage> createState() =>
-      _ConsumerTransactionPageState();
-}
-
-class _ConsumerTransactionPageState extends State<ConsumerTransactionPage> {
-  @override
   Widget build(BuildContext context) {
+    final rp = ConsumerTransactionRepository();
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.consumer.name),
+        centerTitle: true,
+        title: Text(consumer.name),
       ),
-      body: Center(child: Text(widget.consumer.toString())),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Text("Valor"),
-                  content: TextField(
-                    decoration: const InputDecoration(hintText: "0,00"),
-                    autofocus: true,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                      CurrencyTextInputFormatter(),
-                    ],
-                  ),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text("Confirmar"))
-                  ],
-                );
-              });
-        },
+        onPressed: () =>
+            Navigator.of(context).pushNamed('addConsumerTransaction'),
         child: const Icon(Icons.add),
+      ),
+      body: FutureBuilder(
+        future: rp.findByConsumerId(consumer.id!),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data!.isEmpty) {
+              return const Center(child: Text("No transaction yet"));
+            }
+
+            return ListConsumerTransactionWidget(
+              transactions: snapshot.data!,
+            );
+          }
+
+          return Container();
+        },
       ),
     );
   }
 }
 
-class CurrencyTextInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    final value = double.parse(newValue.text.replaceAll(',', '.')) * 0.01;
-    final real =
-        NumberFormat.currency(locale: 'pt_BR', decimalDigits: 2, name: '');
-    final s = real.format(value);
+class ListConsumerTransactionWidget extends StatelessWidget {
+  final List<ConsumerTransactionModel> transactions;
 
-    return TextEditingValue(
-        text: s,
-        selection: TextSelection.fromPosition(TextPosition(offset: s.length)));
+  const ListConsumerTransactionWidget({
+    Key? key,
+    required this.transactions,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      padding: const EdgeInsets.all(8),
+      itemCount: transactions.length,
+      itemBuilder: (context, index) {
+        final transaction = transactions[index];
+        return ConsumerTransactionCard(
+            value: transaction.value, datetime: transaction.datetime);
+      },
+      separatorBuilder: (context, index) => const Divider(),
+    );
+  }
+}
+
+class ConsumerTransactionCard extends StatelessWidget {
+  final int value;
+  final DateTime datetime;
+
+  const ConsumerTransactionCard({
+    super.key,
+    required this.value,
+    required this.datetime,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final realFormatter = NumberFormat.currency(
+      locale: 'pt_BR',
+      name: '',
+      decimalDigits: 2,
+    );
+    final dateFormatter = DateFormat.yMd().add_Hm();
+    final text = value < 0 ? 'Pagamento' : 'Compra';
+    final color = value < 0 ? Colors.green[100] : Colors.red[100];
+    final icon = value < 0
+        ? const Icon(
+            Icons.payment,
+            color: Colors.green,
+          )
+        : const Icon(
+            Icons.shopping_cart,
+            color: Colors.red,
+          );
+    final valueFormatted = realFormatter.format(value * 0.01);
+    final dateFormatted = dateFormatter.format(datetime);
+
+    return Card(
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        height: 80,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CircleAvatar(
+              backgroundColor: color,
+              child: icon,
+            ),
+            Text(text),
+            Text(valueFormatted),
+            Text(dateFormatted),
+            const Icon(Icons.more_vert)
+          ],
+        ),
+      ),
+    );
   }
 }

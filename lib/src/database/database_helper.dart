@@ -58,6 +58,7 @@ class DatabaseHelper {
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     consumer_id INTEGER                          ,
     value       INTEGER NOT NULL                 ,
+    datetime    INTEGER NOT NULL                 ,
 
     FOREIGN KEY (consumer_id) REFERENCES consumer(id)
   );
@@ -72,10 +73,10 @@ class DatabaseHelper {
   ''';
 
   String get _populateConsumerTransactionTable => '''
-  INSERT INTO consumer_transaction (consumer_id, value) VALUES (1, 10),
-  (1, 15),
-  (1, 20),
-  (1, -30),
-  (1, 5);
+  INSERT INTO consumer_transaction (consumer_id, value, datetime) VALUES (1, 10, 1675220300),
+  (1, 15, 1675220400),
+  (1, 20, 1677639599),
+  (1, -30, 1677639500),
+  (1, 5, 1677639450);
   ''';
 }
