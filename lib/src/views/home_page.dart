@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.of(context).pushNamed('/add');
+                Navigator.of(context).pushNamed('/consumer/add');
               },
               icon: const Icon(Icons.person_add)),
         ],
@@ -66,8 +66,10 @@ class _HomePageState extends State<HomePage> {
         });
       },
       onTap: () {
-        Navigator.of(context)
-            .pushNamed('/consumerTransactionPage', arguments: consumer);
+        Navigator.of(context).pushNamed(
+          '/consumerTransaction',
+          arguments: consumer,
+        );
       },
       title: Text(name),
       subtitle: Text(balanceStr),

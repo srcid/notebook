@@ -27,7 +27,7 @@ class _ConsumerTransactionPageState extends State<ConsumerTransactionPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await Navigator.of(context).pushNamed('/addConsumerTransaction',
+          await Navigator.of(context).pushNamed('/consumerTransaction/add',
               arguments: widget.consumer.id);
 
           setState(() {});

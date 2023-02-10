@@ -26,8 +26,8 @@ class AppWidget extends StatelessWidget {
           ),
           routes: {
             '/': (context) => const SafeArea(child: HomePage()),
-            '/add': (context) => SafeArea(child: NewConsumerPage()),
-            '/addConsumerTransaction': (context) {
+            '/consumer/add': (context) => SafeArea(child: NewConsumerPage()),
+            '/consumerTransaction/add': (context) {
               final int consumerId =
                   (ModalRoute.of(context)!.settings.arguments as int);
               return SafeArea(
@@ -35,7 +35,7 @@ class AppWidget extends StatelessWidget {
                 consumerId: consumerId,
               ));
             },
-            '/consumerTransactionPage': (context) {
+            '/consumerTransaction': (context) {
               final consumer =
                   (ModalRoute.of(context)!.settings.arguments as ConsumerModel);
 
