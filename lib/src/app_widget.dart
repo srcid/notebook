@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:notebook/src/controllers/consumer_controller.dart';
-import 'package:notebook/src/views/consumer_transactions_page.dart';
-import 'package:notebook/src/views/new_consumer_transaction_page.dart';
 import 'package:provider/provider.dart';
 
 import 'models/consumer_model.dart';
-import 'views/home_page.dart';
-import 'views/new_consumer_page.dart';
+import 'views/add_consumer/new_consumer_page.dart';
+import 'views/list_consumer_transactions/consumer_transactions_page.dart';
+import 'views/list_consumers/home_page.dart';
+import 'views/add_consumer_transaction/new_consumer_transaction_page.dart';
 
 class AppWidget extends StatelessWidget {
   const AppWidget({super.key});

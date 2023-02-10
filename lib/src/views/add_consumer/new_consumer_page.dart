@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:notebook/src/controllers/consumer_controller.dart';
 import 'package:provider/provider.dart';
-import '../controllers/consumer_controller.dart';
+
 import 'dart:developer' as dev;
 
 class NewConsumerPage extends StatelessWidget {

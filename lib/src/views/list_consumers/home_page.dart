@@ -1,9 +1,7 @@
-import 'dart:developer' as dev;
-
 import 'package:flutter/material.dart';
-import 'package:notebook/src/views/consumer_transactions_page.dart';
+
 import 'package:provider/provider.dart';
-import '../controllers/consumer_controller.dart';
+import '../../controllers/consumer_controller.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
