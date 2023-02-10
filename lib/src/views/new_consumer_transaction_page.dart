@@ -22,6 +22,7 @@ class _NewConsumerTransactionPageState
   @override
   Widget build(BuildContext context) {
     final consumerId = widget.consumerId;
+    String? valueStr;
 
     return Scaffold(
       appBar: AppBar(
@@ -58,17 +59,14 @@ class _NewConsumerTransactionPageState
             ),
             TextFormField(
               autofocus: true,
+              validator: (value) =>
+                  RegExp(r'[0-9]{1,3}(\.[0-9]{3})*,[0-9]{2}').hasMatch(value!)
+                      ? null
+                      : 'Valor inválido',
               keyboardType: TextInputType.number,
               initialValue: '0,00',
-              onSaved: (newValue) async {
-                final newObj = ConsumerTransactionModel(
-                  consumerId: consumerId,
-                  datetime: DateTime.now(),
-                  value: transactionType *
-                      int.parse(newValue!.replaceAll(RegExp(r'(\.|,)'), '')),
-                );
-
-                print(await rp.add(newObj));
+              onSaved: (newValue) {
+                valueStr = newValue!;
               },
               decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.payment),
@@ -87,9 +85,23 @@ class _NewConsumerTransactionPageState
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size.fromHeight(40),
               ),
-              onPressed: () {
-                formKey.currentState?.save();
-                Navigator.of(context).pop();
+              onPressed: () async {
+                if (formKey.currentState?.validate() ?? false) {
+                  formKey.currentState?.save();
+
+                  final newObj = ConsumerTransactionModel(
+                    consumerId: consumerId,
+                    datetime: DateTime.now(),
+                    value: transactionType *
+                        int.parse(valueStr!.replaceAll(RegExp(r'(\.|,)'), '')),
+                  );
+
+                  rp.add(newObj)
+                    ..then((value) => null)
+                    ..onError((error, stackTrace) => 1);
+
+                  Navigator.of(context).pop();
+                }
               },
               child: const Text('Confirmar'),
             )
