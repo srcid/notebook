@@ -5,11 +5,17 @@ import 'package:notebook/src/repository/consuemer_transaction_repository.dart';
 
 import '../models/consumer_transaction_model.dart';
 
-class ConsumerTransactionPage extends StatelessWidget {
+class ConsumerTransactionPage extends StatefulWidget {
   final ConsumerModel consumer;
 
   const ConsumerTransactionPage({super.key, required this.consumer});
 
+  @override
+  State<ConsumerTransactionPage> createState() =>
+      _ConsumerTransactionPageState();
+}
+
+class _ConsumerTransactionPageState extends State<ConsumerTransactionPage> {
   @override
   Widget build(BuildContext context) {
     final rp = ConsumerTransactionRepository();
@@ -17,15 +23,19 @@ class ConsumerTransactionPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(consumer.name),
+        title: Text(widget.consumer.name),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            Navigator.of(context).pushNamed('addConsumerTransaction'),
+        onPressed: () async {
+          await Navigator.of(context).pushNamed('/addConsumerTransaction',
+              arguments: widget.consumer.id);
+
+          setState(() {});
+        },
         child: const Icon(Icons.add),
       ),
       body: FutureBuilder(
-        future: rp.findByConsumerId(consumer.id!),
+        future: rp.findByConsumerId(widget.consumer.id!),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data!.isEmpty) {
