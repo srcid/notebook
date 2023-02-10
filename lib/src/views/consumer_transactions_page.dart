@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
 import 'package:notebook/src/models/consumer_model.dart';
 import 'package:notebook/src/repository/consuemer_transaction_repository.dart';
@@ -36,7 +35,7 @@ class _ConsumerTransactionPageState extends State<ConsumerTransactionPage> {
         child: const Icon(Icons.add),
       ),
       body: FutureBuilder(
-        future: rp.findByConsumerId(widget.consumer.id!),
+        future: rp.findByConsumerIdOrdered(widget.consumer.id!),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data!.isEmpty) {

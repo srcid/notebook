@@ -58,4 +58,16 @@ class ConsumerTransactionRepository
     );
     return list.map((e) => ConsumerTransactionModel.fromJson(e)).toList();
   }
+
+  Future<List<ConsumerTransactionModel>> findByConsumerIdOrdered(
+      int consumerId) async {
+    final database = await DatabaseHelper.instance.database;
+    final list = await database.query(
+      table,
+      where: 'consumer_id = ?',
+      whereArgs: [consumerId],
+      orderBy: 'datetime DESC',
+    );
+    return list.map((e) => ConsumerTransactionModel.fromJson(e)).toList();
+  }
 }
