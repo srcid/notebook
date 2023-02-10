@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
 import 'package:notebook/src/models/consumer_model.dart';
 import 'package:notebook/src/repository/consuemer_transaction_repository.dart';
@@ -94,7 +95,7 @@ class ConsumerTransactionCard extends StatelessWidget {
       name: '',
       decimalDigits: 2,
     );
-    final dateFormatter = DateFormat.yMd().add_Hm();
+    final dateFormatter = DateFormat(r'dd/MM/y HH:mm');
     final text = value < 0 ? 'Pagamento' : 'Compra';
     final color = value < 0 ? Colors.green[100] : Colors.red[100];
     final icon = value < 0
