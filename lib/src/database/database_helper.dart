@@ -85,6 +85,9 @@ class DatabaseHelper {
   String get _createConsumerIndex => '''
   CREATE UNIQUE INDEX consumer_index
   ON consumer(id);
+
+  CREATE INDEX consumer_transaction_consuemr_id_index
+  ON consumer_transaction(consumer_id);
   ''';
 
   String get _createTrigger => '''
