@@ -86,7 +86,7 @@ class DatabaseHelper {
   CREATE UNIQUE INDEX consumer_index
   ON consumer(id);
 
-  CREATE INDEX consumer_transaction_consuemr_id_index
+  CREATE INDEX consumer_transaction_consumer_id_index
   ON consumer_transaction(consumer_id);
   ''';
 
