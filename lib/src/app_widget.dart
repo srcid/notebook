@@ -23,6 +23,10 @@ class AppWidget extends StatelessWidget {
         return MaterialApp(
           theme: ThemeData(
             primarySwatch: Colors.blue,
+            listTileTheme: ListTileThemeData(
+              selectedColor: Colors.black,
+              selectedTileColor: Colors.blueGrey[100],
+            ),
           ),
           routes: {
             '/': (context) => const SafeArea(child: HomePage()),
