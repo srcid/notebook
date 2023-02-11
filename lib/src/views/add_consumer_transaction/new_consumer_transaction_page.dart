@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
-import 'package:notebook/src/models/consumer_transaction_model.dart';
-import 'package:notebook/src/repository/consuemer_transaction_repository.dart';
+
+import '../../models/consumer_transaction_model.dart';
+import '../../repository/consuemer_transaction_repository.dart';
+import 'utils/currency_text_input_formatter.dart';
 
 class NewConsumerTransactionPage extends StatefulWidget {
   final int consumerId;
@@ -106,30 +107,6 @@ class _NewConsumerTransactionPageState
               child: const Text('Confirmar'),
             )
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class CurrencyTextInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    final real = NumberFormat.currency(
-      locale: 'pt_BR',
-      name: '',
-      decimalDigits: 2,
-    );
-
-    final oldValueDouble = double.parse(newValue.text) * 0.01;
-    final newValueFormatted = real.format(oldValueDouble);
-
-    return TextEditingValue(
-      text: newValueFormatted,
-      selection: TextSelection.fromPosition(
-        TextPosition(
-          offset: newValueFormatted.length,
         ),
       ),
     );
