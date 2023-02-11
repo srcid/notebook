@@ -41,6 +41,9 @@ class DatabaseHelper {
   _onCreate(Database database, int version) async {
     await database.execute(_createConsumerTable);
     await database.execute(_createConsumerTransactionTable);
+    await database.rawQuery(_createTrigger);
+    await database.rawQuery(_createConsumerIndex);
+
     await database.rawInsert(_populateConsumerTable);
     await database.rawInsert(_populateConsumerTransactionTable);
   }
@@ -60,23 +63,56 @@ class DatabaseHelper {
     value       INTEGER NOT NULL                 ,
     datetime    INTEGER NOT NULL                 ,
 
-    FOREIGN KEY (consumer_id) REFERENCES consumer(id)
+    CONSTRAINT fk_consumer_id
+    FOREIGN KEY (consumer_id) 
+    REFERENCES consumer(id) 
+    ON DELETE CASCADE
   );
   ''';
 
   String get _populateConsumerTable => '''
-  INSERT INTO consumer (name, balance) VALUES ('FULANO DE TAL', 2835),
-  ('CICRANO DA SILVA', 14410),
-  ('NOME NOME NOME NOME', 109940),
-  ('NOME', 22222),
-  ('OUTRO NOME OUTRO NOME', 14141);
+  INSERT INTO consumer (name) 
+  VALUES ('MARIA DA SILVA'), ('FRANCISCO FERREIRA FERRAZ FRANCO'),
+  ('JOELMA JANUARIO'), ('CAMILO CAMARGO CORREIA'), ('JOÃO');
   ''';
 
   String get _populateConsumerTransactionTable => '''
-  INSERT INTO consumer_transaction (consumer_id, value, datetime) VALUES (1, 10, 1675220300),
-  (1, 15, 1675220400),
-  (1, 20, 1677639599),
-  (1, -30, 1677639500),
-  (1, 5, 1677639450);
+  INSERT INTO consumer_transaction (consumer_id, value, datetime) 
+  VALUES (1, 1000, 1675220300), (1, 1500, 1675220400), (1, 2050, 1677639599),
+  (1, -3010, 1677639500), (1, 5550, 1677639450);
+  ''';
+
+  String get _createConsumerIndex => '''
+  CREATE UNIQUE INDEX consumer_index
+  ON consumer(id);
+  ''';
+
+  String get _createTrigger => '''
+  CREATE TRIGGER update_consumer_balance
+  AFTER INSERT 
+  ON consumer_transaction
+  BEGIN 
+      UPDATE consumer 
+      SET balance = balance + NEW.value
+      WHERE id = NEW.consumer_id;
+  END;
+
+  CREATE TRIGGER update_consumer_balance
+  AFTER DELETE 
+  ON consumer_transaction
+  BEGIN 
+      UPDATE consumer 
+      SET balance = balance - OLD.value
+      WHERE id = NEW.consumer_id;
+  END;
+
+  CREATE TRIGGER update_consumer_balance
+  AFTER UPDATE 
+  ON consumer_transaction
+  BEGIN 
+      UPDATE consumer 
+      SET balance = balance + NEW.value - OLD.value
+      WHERE id = NEW.consumer_id;
+  END;
   ''';
 }
