@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
+
 import '../../controllers/consumer_controller.dart';
-import 'package:intl/intl.dart';
+import 'widgets/consumer_list_tile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,11 +13,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _consumersSelected = List<bool>.filled(9999, false);
-  final _real = NumberFormat.currency(
-    locale: 'pt_BR',
-    name: '',
-    decimalDigits: 2,
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -39,40 +34,17 @@ class _HomePageState extends State<HomePage> {
       body: ListView.separated(
         padding: const EdgeInsets.all(8),
         separatorBuilder: (context, index) => const Divider(height: 16),
-        itemBuilder: itemBuilder,
+        itemBuilder: (context, index) => ConsumerListTile(
+          consumer: consumers[index],
+          isSelected: _consumersSelected[index],
+          onLongPress: () {
+            setState(() {
+              _consumersSelected[index] = !_consumersSelected[index];
+            });
+          },
+        ),
         itemCount: consumers.length,
       ),
-    );
-  }
-
-  Widget itemBuilder(BuildContext context, int index) {
-    final consumerController = Provider.of<ConsumerController>(context);
-    final consumer = consumerController.consumers[index];
-    final balanceStr = _real.format(consumer.balance * 0.01);
-    final name = consumer.name;
-
-    return ListTile(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
-      ),
-      leading: CircleAvatar(
-        child: Text(name[0]),
-      ),
-      onLongPress: () {
-        setState(() {
-          _consumersSelected[index] = !_consumersSelected[index];
-        });
-      },
-      onTap: () {
-        Navigator.of(context).pushNamed(
-          '/consumerTransaction',
-          arguments: consumer,
-        );
-      },
-      title: Text(name),
-      subtitle: Text(balanceStr),
-      selected: _consumersSelected[index],
-      selectedTileColor: Colors.blueGrey[100],
     );
   }
 }
