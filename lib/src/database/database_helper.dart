@@ -43,6 +43,7 @@ class DatabaseHelper {
     await database.execute(_createConsumerTransactionTable);
     await database.rawQuery(_createTrigger);
     await database.rawQuery(_createConsumerIndex);
+    await database.rawQuery(_createConsumerTransactionIndex);
 
     await database.rawInsert(_populateConsumerTable);
     await database.rawInsert(_populateConsumerTransactionTable);
@@ -85,7 +86,9 @@ class DatabaseHelper {
   String get _createConsumerIndex => '''
   CREATE UNIQUE INDEX consumer_index
   ON consumer(id);
+  ''';
 
+  String get _createConsumerTransactionIndex => '''
   CREATE INDEX consumer_transaction_consumer_id_index
   ON consumer_transaction(consumer_id);
   ''';
