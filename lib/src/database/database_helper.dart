@@ -94,7 +94,7 @@ class DatabaseHelper {
   ''';
 
   String get _createTrigger => '''
-  CREATE TRIGGER update_consumer_balance
+  CREATE TRIGGER update_consumer_balance_after_insert
   AFTER INSERT 
   ON consumer_transaction
   BEGIN 
@@ -103,7 +103,7 @@ class DatabaseHelper {
       WHERE id = NEW.consumer_id;
   END;
 
-  CREATE TRIGGER update_consumer_balance
+  CREATE TRIGGER update_consumer_balance_after_delete
   AFTER DELETE 
   ON consumer_transaction
   BEGIN 
@@ -112,7 +112,7 @@ class DatabaseHelper {
       WHERE id = NEW.consumer_id;
   END;
 
-  CREATE TRIGGER update_consumer_balance
+  CREATE TRIGGER update_consumer_balance_after_update
   AFTER UPDATE 
   ON consumer_transaction
   BEGIN 
