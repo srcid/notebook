@@ -77,4 +77,18 @@ class OperationRepositorySQLite implements OperationRepository {
 
     return count; /* number of rows affected */
   }
+
+  @override
+  Future<List<OperationModel>> findByClientIdOrderByDatetime(
+      int clientId) async {
+    final map = await db.query(table,
+        where: 'client_id = ?',
+        whereArgs: [clientId],
+        orderBy: 'datetime DESC');
+
+    return List.generate(
+      map.length,
+      (index) => OperationModel.fromMap(map[index]),
+    );
+  }
 }

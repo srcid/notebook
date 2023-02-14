@@ -7,4 +7,5 @@ abstract class OperationRepository {
   Future<List<OperationModel>> findAll();
   Future<OperationModel> findById(int id);
   Future<List<OperationModel>> findByClientId(int clientId);
+  Future<List<OperationModel>> findByClientIdOrderByDatetime(int clientId);
 }
