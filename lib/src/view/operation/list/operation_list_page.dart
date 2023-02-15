@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:notebook/src/repository/interface/operation_repository.dart';
-import 'package:notebook/src/repository/sqlite/operation_repository_sqlite.dart';
 
 import '../../../model/client_model.dart';
+import '../../../repository/interface/operation_repository.dart';
+import '../../../repository/sqlite/operation_repository_sqlite.dart';
 
 class OperationListPage extends StatefulWidget {
   const OperationListPage({super.key, required this.client});

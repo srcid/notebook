@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:notebook/src/model/client_model.dart';
-import 'package:notebook/src/repository/interface/client_repository.dart';
-import 'package:notebook/src/repository/sqlite/client_repository_sqlite.dart';
-import 'package:provider/provider.dart';
+
+import '../../../model/client_model.dart';
+import '../../../repository/sqlite/client_repository_sqlite.dart';
 
 class ClientListPage extends StatefulWidget {
   const ClientListPage({super.key});
