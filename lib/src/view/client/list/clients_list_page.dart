@@ -12,25 +12,33 @@ class ClientListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final clientController = context.watch<ClientController>();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Clients'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed('/client/add');
-            },
-            icon: const Icon(Icons.person_add),
-          ),
-        ],
-      ),
-      body: ListView.builder(
-        itemCount: clientController.clients.length,
-        itemBuilder: (context, index) {
-          final client = clientController.clients[index];
-          return ClientListTile(client: client);
-        },
-      ),
-    );
+        appBar: AppBar(
+          title: const Text('Clients'),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/client/add');
+              },
+              icon: const Icon(Icons.person_add),
+            ),
+          ],
+        ),
+        body: FutureBuilder(
+          future: clientController.clients,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final clients = snapshot.data!;
+              return ListView.builder(
+                itemCount: clients.length,
+                itemBuilder: (context, index) {
+                  final client = clients[index];
+                  return ClientListTile(client: client);
+                },
+              );
+            }
+            return Container();
+          },
+        ));
   }
 }
 

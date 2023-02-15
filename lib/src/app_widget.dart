@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notebook/src/view/operation/add/client_add_page.dart';
+import 'package:notebook/src/view/client/add/client_add_page.dart';
 import 'package:notebook/src/view/operation/list/extract_client.dart';
 import 'package:provider/provider.dart';
 
