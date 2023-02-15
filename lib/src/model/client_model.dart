@@ -23,7 +23,7 @@ class ClientModel {
     return {
       'id': id,
       'name': name,
-      'balamce': balance,
+      'balance': balance,
     };
   }
 
