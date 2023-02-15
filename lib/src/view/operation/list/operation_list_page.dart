@@ -11,27 +11,46 @@ class OperationListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final operationController = context.watch<OperationByClientController>();
-    final operations = operationController.operations;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(client.name),
       ),
-      body: Visibility(
-        visible: operations.length > 0,
-        replacement: const Center(
-          child: Text('No operation yet'),
-        ),
-        child: ListView.builder(
-          itemCount: operations.length,
-          itemBuilder: (context, index) {
-            final operation = operations[index];
-            return OperationListTile(
-              value: operation.value,
-              datetime: operation.datetime,
+      body: FutureBuilder(
+        future: operationController.operations,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final operations = snapshot.data!;
+
+            return Visibility(
+              visible: operations.isNotEmpty,
+              replacement: const Center(
+                child: Text('No operation yet'),
+              ),
+              child: ListView.builder(
+                itemCount: operations.length,
+                itemBuilder: (context, index) {
+                  final operation = operations[index];
+                  return OperationListTile(
+                    value: operation.value,
+                    datetime: operation.datetime,
+                  );
+                },
+              ),
             );
-          },
-        ),
+          }
+
+          return Container();
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.of(context).pushNamed(
+            '/operation/add',
+            arguments: context.read<OperationByClientController>(),
+          );
+        },
       ),
     );
   }

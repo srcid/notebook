@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:notebook/src/view/client/add/client_add_page.dart';
-import 'package:notebook/src/view/operation/list/extract_client.dart';
 import 'package:provider/provider.dart';
 
 import 'controller/client_controller.dart';
+import 'view/client/add/client_add_page.dart';
 import 'view/client/list/clients_list_page.dart';
+import 'view/operation/add/extract_operation_by_client_controller.dart';
+import 'view/operation/list/extract_client.dart';
 
 class AppWidget extends StatelessWidget {
   const AppWidget({super.key});
@@ -27,6 +28,8 @@ class AppWidget extends StatelessWidget {
           '/client/list': (context) => const ClientListPage(),
           '/client/add': (context) => const ClientAddPage(),
           '/operation/list': (context) => const ExtractClient(),
+          '/operation/add': (context) =>
+              const ExtractOperationByClientController(),
         },
       ),
     );
