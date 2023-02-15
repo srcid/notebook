@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:notebook/src/model/client_model.dart';
-import 'package:provider/provider.dart';
+import 'package:notebook/src/repository/interface/client_repository.dart';
 
-import '../../../controller/client_controller.dart';
+import '../../../repository/sqlite/client_repository_sqlite.dart';
 
 class ClientAddPage extends StatefulWidget {
   const ClientAddPage({super.key});
@@ -13,11 +13,11 @@ class ClientAddPage extends StatefulWidget {
 
 class _ClientAddPageState extends State<ClientAddPage> {
   final form = GlobalKey<FormState>();
+  final ClientRepository clientRepository = ClientRepositorySQLite();
+  String name = '';
 
   @override
   Widget build(BuildContext context) {
-    String name = '';
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Register'),
@@ -56,12 +56,12 @@ class _ClientAddPageState extends State<ClientAddPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (form.currentState?.validate() ?? false) {
                         form.currentState?.save();
                         final newClient =
                             ClientModel(name: name.trim().toUpperCase());
-                        context.read<ClientController>().save(newClient);
+                        await clientRepository.save(newClient);
                         Navigator.of(context).pop<bool>(true);
                       }
                     },

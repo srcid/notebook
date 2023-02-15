@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+import 'package:notebook/src/repository/interface/operation_repository.dart';
+import 'package:notebook/src/repository/sqlite/operation_repository_sqlite.dart';
 
-import '../../../controller/operation_by_client_controller.dart';
+import '../../../model/client_model.dart';
 import '../../../model/operation_model.dart';
 
 class OperationAddPage extends StatefulWidget {
-  const OperationAddPage(
-      {super.key, required this.operationByClientController});
-  final OperationByClientController operationByClientController;
+  const OperationAddPage({super.key, required this.client});
+
+  final ClientModel client;
 
   @override
   State<OperationAddPage> createState() => _OperationAddPageState();
@@ -18,11 +19,11 @@ class OperationAddPage extends StatefulWidget {
 class _OperationAddPageState extends State<OperationAddPage> {
   var transactionType = 1;
   final formKey = GlobalKey<FormState>();
+  final OperationRepository operationRepository = OperationRepositorySQLite();
+  String valueStr = '';
 
   @override
   Widget build(BuildContext context) {
-    String? valueStr;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('New operation'),
@@ -84,19 +85,18 @@ class _OperationAddPageState extends State<OperationAddPage> {
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size.fromHeight(40),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (formKey.currentState?.validate() ?? false) {
                     formKey.currentState?.save();
 
                     final newOperation = OperationModel(
-                      clientId: widget.operationByClientController.clientId,
+                      clientId: widget.client.id!,
                       datetime: DateTime.now(),
                       value: transactionType *
-                          int.parse(
-                              valueStr!.replaceAll(RegExp(r'(\.|,)'), '')),
+                          int.parse(valueStr.replaceAll(RegExp(r'(\.|,)'), '')),
                     );
 
-                    widget.operationByClientController.save(newOperation);
+                    await operationRepository.save(newOperation);
 
                     Navigator.of(context).pop();
                   }

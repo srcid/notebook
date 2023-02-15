@@ -1,23 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+import 'package:notebook/src/repository/interface/operation_repository.dart';
+import 'package:notebook/src/repository/sqlite/operation_repository_sqlite.dart';
 
-import '../../../controller/operation_by_client_controller.dart';
 import '../../../model/client_model.dart';
 
-class OperationListPage extends StatelessWidget {
+class OperationListPage extends StatefulWidget {
   const OperationListPage({super.key, required this.client});
   final ClientModel client;
+
+  @override
+  State<OperationListPage> createState() => _OperationListPageState();
+}
+
+class _OperationListPageState extends State<OperationListPage> {
+  final OperationRepository operationRepository = OperationRepositorySQLite();
+
   @override
   Widget build(BuildContext context) {
-    final operationController = context.watch<OperationByClientController>();
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(client.name),
+        title: Text(widget.client.name),
       ),
       body: FutureBuilder(
-        future: operationController.operations,
+        future: operationRepository
+            .findByClientIdOrderByDatetime(widget.client.id!),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final operations = snapshot.data!;
@@ -45,11 +52,12 @@ class OperationListPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () {
-          Navigator.of(context).pushNamed(
+        onPressed: () async {
+          await Navigator.of(context).pushNamed(
             '/operation/add',
-            arguments: context.read<OperationByClientController>(),
+            arguments: widget.client,
           );
+          setState(() {});
         },
       ),
     );

@@ -1,12 +1,13 @@
+import 'package:notebook/src/database/database_client.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../model/client_model.dart';
 import '../interface/client_repository.dart';
 
 class ClientRepositorySQLite implements ClientRepository {
-  ClientRepositorySQLite(this.db);
+  ClientRepositorySQLite() : db = DatabaseClient.instance.database;
 
-  Database db;
+  final Database db;
   static const table = 'client';
 
   @override

@@ -1,13 +1,13 @@
+import 'package:notebook/src/database/database_client.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../model/operation_model.dart';
 import '../interface/operation_repository.dart';
 
 class OperationRepositorySQLite implements OperationRepository {
-  Database db;
+  OperationRepositorySQLite() : db = DatabaseClient.instance.database;
+  final Database db;
   static const table = 'operation';
-
-  OperationRepositorySQLite(this.db);
 
   @override
   Future<List<OperationModel>> findAll() async {
