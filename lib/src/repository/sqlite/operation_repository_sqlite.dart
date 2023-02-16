@@ -1,6 +1,6 @@
-import 'package:notebook/src/database/database_client.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../../database/database_client.dart';
 import '../../model/operation_model.dart';
 import '../interface/operation_repository.dart';
 
