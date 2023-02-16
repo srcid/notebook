@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 
-@immutable
 class ClientModel {
   final int? id;
   final String name;
@@ -11,13 +10,6 @@ class ClientModel {
     required this.name,
     this.balance = 0,
   });
-
-  ClientModel copyWith({int? id, String? name, int? balance}) {
-    return ClientModel(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        balance: balance ?? this.balance);
-  }
 
   Map<String, dynamic> toMap() {
     return {

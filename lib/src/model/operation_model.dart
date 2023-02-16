@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 
-@immutable
 class OperationModel {
   final int? id;
   final int clientId;
@@ -13,20 +12,6 @@ class OperationModel {
     required this.value,
     required this.datetime,
   });
-
-  OperationModel copyWith({
-    int? id,
-    int? clientId,
-    int? value,
-    DateTime? datetime,
-  }) {
-    return OperationModel(
-      id: id ?? this.id,
-      clientId: clientId ?? this.clientId,
-      value: value ?? this.value,
-      datetime: datetime ?? this.datetime,
-    );
-  }
 
   toMap() {
     return {
