@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
-import 'package:notebook/src/repository/interface/client_repository.dart';
 
 import '../../../model/client_model.dart';
+import '../../../repository/interface/client_repository.dart';
 
 class ClientListPage extends StatefulWidget {
   const ClientListPage({super.key});
@@ -55,6 +55,10 @@ class _ClientListPageState extends State<ClientListPage> {
                     );
                     setState(() {});
                   },
+                  removeClient: () async {
+                    await clientRepository.remove(client);
+                    setState(() {});
+                  },
                 );
               },
             );
@@ -67,9 +71,14 @@ class _ClientListPageState extends State<ClientListPage> {
 }
 
 class ClientListTile extends StatelessWidget {
-  const ClientListTile({super.key, required this.client, required this.onTap});
+  const ClientListTile(
+      {super.key,
+      required this.client,
+      required this.onTap,
+      required this.removeClient});
   final ClientModel client;
   final Function()? onTap;
+  final Function()? removeClient;
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +91,20 @@ class ClientListTile extends StatelessWidget {
       title: Text(client.name),
       subtitle: Text(real.format(client.balance * 0.01)),
       onTap: onTap,
+      trailing: PopupMenuButton(
+        icon: const Icon(Icons.more_vert),
+        itemBuilder: (BuildContext context) {
+          return [
+            const PopupMenuItem(
+              child: Text('Editar'),
+            ),
+            PopupMenuItem(
+              onTap: removeClient,
+              child: const Text('Remover'),
+            ),
+          ];
+        },
+      ),
     );
   }
 }
