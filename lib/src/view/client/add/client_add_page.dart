@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../../model/client_model.dart';
 import '../../../repository/interface/client_repository.dart';
-import '../../../repository/sqlite/client_repository_sqlite.dart';
 
 class ClientAddPage extends StatefulWidget {
   const ClientAddPage({super.key});
@@ -13,7 +13,8 @@ class ClientAddPage extends StatefulWidget {
 
 class _ClientAddPageState extends State<ClientAddPage> {
   final form = GlobalKey<FormState>();
-  final ClientRepository clientRepository = ClientRepositorySQLite();
+  final ClientRepository clientRepository =
+      GetIt.instance.get<ClientRepository>();
   String name = '';
 
   @override

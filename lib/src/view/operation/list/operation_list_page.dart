@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 import '../../../model/client_model.dart';
 import '../../../repository/interface/operation_repository.dart';
-import '../../../repository/sqlite/operation_repository_sqlite.dart';
 
 class OperationListPage extends StatefulWidget {
   const OperationListPage({super.key, required this.client});
@@ -14,7 +14,8 @@ class OperationListPage extends StatefulWidget {
 }
 
 class _OperationListPageState extends State<OperationListPage> {
-  final OperationRepository operationRepository = OperationRepositorySQLite();
+  final OperationRepository operationRepository =
+      GetIt.instance.get<OperationRepository>();
 
   @override
   Widget build(BuildContext context) {

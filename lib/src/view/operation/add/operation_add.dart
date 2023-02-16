@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 import '../../../model/client_model.dart';
@@ -19,7 +20,8 @@ class OperationAddPage extends StatefulWidget {
 class _OperationAddPageState extends State<OperationAddPage> {
   var transactionType = 1;
   final formKey = GlobalKey<FormState>();
-  final OperationRepository operationRepository = OperationRepositorySQLite();
+  final OperationRepository operationRepository =
+      GetIt.instance.get<OperationRepository>();
   String valueStr = '';
 
   @override
