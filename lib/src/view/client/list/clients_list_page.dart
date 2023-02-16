@@ -22,6 +22,10 @@ class _ClientListPageState extends State<ClientListPage> {
         title: const Text('Clients'),
         actions: [
           IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.search),
+          ),
+          IconButton(
             onPressed: () async {
               await Navigator.of(context).pushNamed('/client/add');
               setState(() {});
