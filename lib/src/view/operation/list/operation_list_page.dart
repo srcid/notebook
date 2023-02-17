@@ -106,11 +106,6 @@ class OperationListTile extends StatelessWidget {
     final dateFormatted = timeago.format(datetime, locale: 'pt_BR_short');
 
     return ListTile(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(8),
-        ),
-      ),
       leading: CircleAvatar(
         backgroundColor: color,
         child: icon,

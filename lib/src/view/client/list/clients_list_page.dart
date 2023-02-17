@@ -87,12 +87,9 @@ class ClientListTile extends StatelessWidget {
     final real =
         NumberFormat.currency(locale: 'pt_BR', name: '', decimalDigits: 2);
     return ListTile(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(8),
-        ),
-      ),
       leading: CircleAvatar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         child: Text(client.name[0]),
       ),
       title: Text(client.name),

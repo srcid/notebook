@@ -17,6 +17,15 @@ class AppWidget extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: lightColorScheme,
+        listTileTheme: ListTileThemeData(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(8),
+            ),
+          ),
+          selectedColor: lightColorScheme.onBackground,
+          selectedTileColor: lightColorScheme.onBackground.withOpacity(0.1),
+        ),
       ),
       darkTheme: ThemeData(
         useMaterial3: true,
