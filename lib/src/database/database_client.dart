@@ -31,7 +31,9 @@ class DatabaseClient {
   _onCreate(Database database, int version) async {
     await database.execute(_createClientTable);
     await database.execute(_createOperationTable);
-    await database.execute(_createOperationTriggers);
+    await database.execute(_triggerUpdateClientBalanceAfterInsertOperation);
+    await database.execute(_triggerUpdateClientBalanceAfterDeleteOperation);
+    await database.execute(_triggerUpdateClientBalanceAfterUpdateOperation);
     await database.execute(_createClientIndex);
     await database.execute(_createOperationIndex);
 
@@ -83,7 +85,7 @@ class DatabaseClient {
   ON operation(client_id);
   ''';
 
-  String get _createOperationTriggers => '''
+  String get _triggerUpdateClientBalanceAfterInsertOperation => '''
   CREATE TRIGGER update_client_balance_after_insert
   AFTER INSERT 
   ON operation
@@ -92,16 +94,20 @@ class DatabaseClient {
       SET balance = balance + NEW.value
       WHERE id = NEW.client_id;
   END;
+  ''';
 
+  String get _triggerUpdateClientBalanceAfterDeleteOperation => '''
   CREATE TRIGGER update_client_balance_after_delete
   AFTER DELETE 
   ON operation
   BEGIN 
       UPDATE client 
       SET balance = balance - OLD.value
-      WHERE id = NEW.client_id;
+      WHERE id = OLD.client_id;
   END;
+  ''';
 
+  String get _triggerUpdateClientBalanceAfterUpdateOperation => '''
   CREATE TRIGGER update_client_balance_after_update
   AFTER UPDATE 
   ON operation
