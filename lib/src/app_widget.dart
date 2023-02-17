@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'theme/color_schemes.g.dart';
 import 'model/client_model.dart';
 import 'view/client/add/client_add_page.dart';
 import 'view/client/list/clients_list_page.dart';
@@ -14,11 +15,12 @@ class AppWidget extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        listTileTheme: ListTileThemeData(
-          selectedColor: Colors.black,
-          selectedTileColor: Colors.blueGrey[100],
-        ),
+        useMaterial3: true,
+        colorScheme: lightColorScheme,
+      ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: darkColorScheme,
       ),
       initialRoute: '/client/list',
       routes: {
