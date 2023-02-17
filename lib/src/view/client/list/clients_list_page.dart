@@ -42,8 +42,10 @@ class _ClientListPageState extends State<ClientListPage> {
             clients.sort(
               (a, b) => a.name.compareTo(b.name),
             );
-            return ListView.builder(
+            return ListView.separated(
+              padding: const EdgeInsets.all(8),
               itemCount: clients.length,
+              separatorBuilder: (context, index) => const Divider(),
               itemBuilder: (context, index) {
                 final client = clients[index];
                 return ClientListTile(
@@ -85,6 +87,11 @@ class ClientListTile extends StatelessWidget {
     final real =
         NumberFormat.currency(locale: 'pt_BR', name: '', decimalDigits: 2);
     return ListTile(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(8),
+        ),
+      ),
       leading: CircleAvatar(
         child: Text(client.name[0]),
       ),

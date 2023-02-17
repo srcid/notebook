@@ -36,7 +36,9 @@ class _OperationListPageState extends State<OperationListPage> {
               replacement: const Center(
                 child: Text('Nenhuma movimentação'),
               ),
-              child: ListView.builder(
+              child: ListView.separated(
+                padding: const EdgeInsets.fromLTRB(8, 8, 8, 64),
+                separatorBuilder: (context, index) => const Divider(),
                 itemCount: operations.length,
                 itemBuilder: (context, index) {
                   final operation = operations[index];
@@ -71,14 +73,17 @@ class _OperationListPageState extends State<OperationListPage> {
 }
 
 class OperationListTile extends StatelessWidget {
-  const OperationListTile(
-      {super.key,
-      required this.value,
-      required this.datetime,
-      required this.removeOperation});
+  const OperationListTile({
+    super.key,
+    required this.value,
+    required this.datetime,
+    required this.removeOperation,
+  });
+
   final int value;
   final DateTime datetime;
   final Function()? removeOperation;
+
   @override
   Widget build(BuildContext context) {
     final realFormatter = NumberFormat.currency(
@@ -101,17 +106,24 @@ class OperationListTile extends StatelessWidget {
     final dateFormatted = timeago.format(datetime, locale: 'pt_BR_short');
 
     return ListTile(
-        leading: CircleAvatar(
-          backgroundColor: color,
-          child: icon,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(8),
         ),
-        title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [Text(text), Text(dateFormatted)]),
-        subtitle: Text(valueFormatted),
-        trailing: IconButton(
-          icon: const Icon(Icons.delete),
-          onPressed: removeOperation,
-        ));
+      ),
+      leading: CircleAvatar(
+        backgroundColor: color,
+        child: icon,
+      ),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [Text(text), Text(dateFormatted)],
+      ),
+      subtitle: Text(valueFormatted),
+      trailing: IconButton(
+        icon: const Icon(Icons.delete),
+        onPressed: removeOperation,
+      ),
+    );
   }
 }
