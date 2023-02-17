@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../model/client_model.dart';
 import '../../../repository/interface/operation_repository.dart';
@@ -33,7 +34,7 @@ class _OperationListPageState extends State<OperationListPage> {
             return Visibility(
               visible: operations.isNotEmpty,
               replacement: const Center(
-                child: Text('No operation yet'),
+                child: Text('Nenhuma movimentação'),
               ),
               child: ListView.builder(
                 itemCount: operations.length,
@@ -42,6 +43,10 @@ class _OperationListPageState extends State<OperationListPage> {
                   return OperationListTile(
                     value: operation.value,
                     datetime: operation.datetime,
+                    removeOperation: () async {
+                      await operationRepository.remove(operation);
+                      setState(() {});
+                    },
                   );
                 },
               ),
@@ -67,9 +72,13 @@ class _OperationListPageState extends State<OperationListPage> {
 
 class OperationListTile extends StatelessWidget {
   const OperationListTile(
-      {super.key, required this.value, required this.datetime});
+      {super.key,
+      required this.value,
+      required this.datetime,
+      required this.removeOperation});
   final int value;
   final DateTime datetime;
+  final Function()? removeOperation;
   @override
   Widget build(BuildContext context) {
     final realFormatter = NumberFormat.currency(
@@ -77,7 +86,6 @@ class OperationListTile extends StatelessWidget {
       name: '',
       decimalDigits: 2,
     );
-    final dateFormatter = DateFormat(r'dd/MM/y HH:mm:ss');
     final text = value < 0 ? 'Pagamento realizado' : 'Compra realizada';
     final color = value < 0 ? Colors.green[100] : Colors.red[100];
     final icon = value < 0
@@ -90,16 +98,20 @@ class OperationListTile extends StatelessWidget {
             color: Colors.red,
           );
     final valueFormatted = realFormatter.format(value.abs() * 0.01);
-    final dateFormatted = dateFormatter.format(datetime);
+    final dateFormatted = timeago.format(datetime, locale: 'pt_BR_short');
 
     return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: color,
-        child: icon,
-      ),
-      title: Text(text),
-      subtitle: Text(valueFormatted),
-      trailing: Text(dateFormatted),
-    );
+        leading: CircleAvatar(
+          backgroundColor: color,
+          child: icon,
+        ),
+        title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [Text(text), Text(dateFormatted)]),
+        subtitle: Text(valueFormatted),
+        trailing: IconButton(
+          icon: const Icon(Icons.delete),
+          onPressed: removeOperation,
+        ));
   }
 }

@@ -36,6 +36,7 @@ dependencies:
   path:
   intl:
   get_it: ^7.2.0
+  timeago: ^3.3.0
 
 dev_dependencies:
   flutter_test:

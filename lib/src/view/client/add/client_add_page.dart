@@ -21,7 +21,7 @@ class _ClientAddPageState extends State<ClientAddPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Register'),
+        title: const Text('Cadastro'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
@@ -41,7 +41,7 @@ class _ClientAddPageState extends State<ClientAddPage> {
                   if (value != null && pattern.hasMatch(value)) {
                     return null;
                   }
-                  return 'Invalid input';
+                  return 'Nome inválido';
                 },
                 onSaved: (String? newValue) {
                   name = newValue!;
@@ -50,7 +50,7 @@ class _ClientAddPageState extends State<ClientAddPage> {
                 decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.person),
                   border: OutlineInputBorder(),
-                  label: Text('Name'),
+                  label: Text('Nome'),
                 ),
               ),
               Column(
@@ -68,7 +68,7 @@ class _ClientAddPageState extends State<ClientAddPage> {
                     },
                     child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 16),
-                        child: Text('Save')),
+                        child: Text('Salvar')),
                   ),
                   const SizedBox(
                     height: 16,
@@ -79,7 +79,7 @@ class _ClientAddPageState extends State<ClientAddPage> {
                     },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Text('Cancel'),
+                      child: Text('Cancelar'),
                     ),
                   ),
                 ],

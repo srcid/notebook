@@ -19,7 +19,7 @@ class _ClientListPageState extends State<ClientListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Clients'),
+        title: const Text('Clientes'),
         actions: [
           IconButton(
             onPressed: () {},

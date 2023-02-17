@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import '../../../model/client_model.dart';
 import '../../../model/operation_model.dart';
 import '../../../repository/interface/operation_repository.dart';
-import '../../../repository/sqlite/operation_repository_sqlite.dart';
 
 class OperationAddPage extends StatefulWidget {
   const OperationAddPage({super.key, required this.client});
@@ -28,7 +27,7 @@ class _OperationAddPageState extends State<OperationAddPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New operation'),
+        title: const Text('Nova operação'),
       ),
       body: Form(
         key: formKey,
@@ -103,7 +102,7 @@ class _OperationAddPageState extends State<OperationAddPage> {
                     Navigator.of(context).pop();
                   }
                 },
-                child: const Text('Confirm'),
+                child: const Text('Confirmar'),
               )
             ],
           ),
