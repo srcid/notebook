@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class OperationModel {
   final int? id;
   final int clientId;
