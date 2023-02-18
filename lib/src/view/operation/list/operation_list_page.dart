@@ -18,6 +18,36 @@ class _OperationListPageState extends State<OperationListPage> {
   final OperationRepository operationRepository =
       GetIt.instance.get<OperationRepository>();
 
+  Future<bool> deleteConfirmationDialog(BuildContext context) async =>
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Aviso'),
+            content: const Text('Deseja remover essa operação?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: Text(
+                  'Não',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: const Text('Sim'),
+              ),
+            ],
+          );
+        },
+      );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,8 +76,10 @@ class _OperationListPageState extends State<OperationListPage> {
                     value: operation.value,
                     datetime: operation.datetime,
                     removeOperation: () async {
-                      await operationRepository.remove(operation);
-                      setState(() {});
+                      if (await deleteConfirmationDialog(context)) {
+                        await operationRepository.remove(operation);
+                        setState(() {});
+                      }
                     },
                   );
                 },
