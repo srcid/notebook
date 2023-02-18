@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
+import '../../../controller/operation_controller.dart';
 import '../../../model/client_model.dart';
 import '../../../model/operation_model.dart';
-import '../../../repository/interface/operation_repository.dart';
 
 class OperationAddPage extends StatefulWidget {
   const OperationAddPage({super.key, required this.client});
@@ -19,8 +19,7 @@ class OperationAddPage extends StatefulWidget {
 class _OperationAddPageState extends State<OperationAddPage> {
   var transactionType = 1;
   final formKey = GlobalKey<FormState>();
-  final OperationRepository operationRepository =
-      GetIt.instance.get<OperationRepository>();
+  final operationController = GetIt.instance.get<OperationController>();
   String valueStr = '';
 
   @override
@@ -86,7 +85,7 @@ class _OperationAddPageState extends State<OperationAddPage> {
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size.fromHeight(40),
                 ),
-                onPressed: () async {
+                onPressed: () {
                   if (formKey.currentState?.validate() ?? false) {
                     formKey.currentState?.save();
 
@@ -97,7 +96,7 @@ class _OperationAddPageState extends State<OperationAddPage> {
                           int.parse(valueStr.replaceAll(RegExp(r'(\.|,)'), '')),
                     );
 
-                    await operationRepository.save(newOperation);
+                    operationController.save(newOperation);
 
                     Navigator.of(context).pop();
                   }

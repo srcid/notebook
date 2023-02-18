@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../controller/client_controller.dart';
 import '../../../model/client_model.dart';
-import '../../../repository/interface/client_repository.dart';
 
 class ClientAddPage extends StatefulWidget {
   const ClientAddPage({super.key});
@@ -13,8 +13,7 @@ class ClientAddPage extends StatefulWidget {
 
 class _ClientAddPageState extends State<ClientAddPage> {
   final form = GlobalKey<FormState>();
-  final ClientRepository clientRepository =
-      GetIt.instance.get<ClientRepository>();
+  final clientController = GetIt.instance.get<ClientController>();
   String name = '';
 
   @override
@@ -38,7 +37,7 @@ class _ClientAddPageState extends State<ClientAddPage> {
                     unicode: true,
                   );
 
-                  if (value != null && pattern.hasMatch(value)) {
+                  if (value != null && pattern.hasMatch(value.trim())) {
                     return null;
                   }
                   return 'Nome inválido';
@@ -57,12 +56,12 @@ class _ClientAddPageState extends State<ClientAddPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   ElevatedButton(
-                    onPressed: () async {
+                    onPressed: () {
                       if (form.currentState?.validate() ?? false) {
                         form.currentState?.save();
                         final newClient =
                             ClientModel(name: name.trim().toUpperCase());
-                        await clientRepository.save(newClient);
+                        clientController.save(newClient);
                         Navigator.of(context).pop<bool>(true);
                       }
                     },

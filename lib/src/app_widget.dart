@@ -7,7 +7,7 @@ import 'controller/operation_controller.dart';
 import 'theme/color_schemes.g.dart';
 import 'model/client_model.dart';
 import 'view/client/add/client_add_page.dart';
-import 'view/client/list/clients_list_page.dart';
+import 'view/client/list/clients_list_page_builder.dart';
 import 'view/operation/add/operation_add.dart';
 import 'view/operation/list/operation_list_page_builder.dart';
 
@@ -48,7 +48,7 @@ class AppWidget extends StatelessWidget {
         ),
         initialRoute: '/client/list',
         routes: {
-          '/client/list': (context) => const ClientListPage(),
+          '/client/list': (context) => const ClientListPageBuilder(),
           '/client/add': (context) => const ClientAddPage(),
           '/operation/list': (context) {
             final client =
