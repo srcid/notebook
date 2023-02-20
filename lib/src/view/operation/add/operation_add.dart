@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
-import 'package:intl/intl.dart';
 
 import '../../../controller/operation_controller.dart';
 import '../../../model/client_model.dart';
 import '../../../model/operation_model.dart';
+import '../../../util/operation_type.dart';
+import 'util/currency_input_formatter.dart';
 
 class OperationAddPage extends StatefulWidget {
   const OperationAddPage({super.key, required this.client});
@@ -17,7 +18,7 @@ class OperationAddPage extends StatefulWidget {
 }
 
 class _OperationAddPageState extends State<OperationAddPage> {
-  var transactionType = 1;
+  var operationType = OperationType.buy;
   final formKey = GlobalKey<FormState>();
   final operationController = GetIt.instance.get<OperationController>();
   String valueStr = '';
@@ -34,23 +35,23 @@ class _OperationAddPageState extends State<OperationAddPage> {
           padding: const EdgeInsets.all(8),
           child: Column(
             children: [
-              RadioListTile<int>(
-                title: const Text('Pagamento'),
-                value: -1,
-                groupValue: transactionType,
+              RadioListTile(
+                title: Text(OperationType.pay.title),
+                value: OperationType.pay,
+                groupValue: operationType,
                 onChanged: (value) {
                   setState(() {
-                    transactionType = value!;
+                    operationType = value!;
                   });
                 },
               ),
               RadioListTile(
-                title: const Text('Compra'),
-                value: 1,
-                groupValue: transactionType,
+                title: Text(OperationType.buy.title),
+                value: OperationType.buy,
+                groupValue: operationType,
                 onChanged: (value) {
                   setState(() {
-                    transactionType = value!;
+                    operationType = value!;
                   });
                 },
               ),
@@ -59,10 +60,16 @@ class _OperationAddPageState extends State<OperationAddPage> {
               ),
               TextFormField(
                 autofocus: true,
-                validator: (value) =>
-                    RegExp(r'[0-9]{1,3}(\.[0-9]{3})*,[0-9]{2}').hasMatch(value!)
-                        ? null
-                        : 'Valor inválido',
+                validator: (String? value) {
+                  final currencyRegExp =
+                      RegExp(r'[0-9]{1,3}(\.[0-9]{3})*,[0-9]{2}');
+                  if (value == null) {
+                    return 'Valor não pode ser nulo';
+                  }
+                  return currencyRegExp.hasMatch(value)
+                      ? null
+                      : 'Valor inválido';
+                },
                 keyboardType: TextInputType.number,
                 initialValue: '0,00',
                 onSaved: (newValue) {
@@ -88,12 +95,17 @@ class _OperationAddPageState extends State<OperationAddPage> {
                 onPressed: () {
                   if (formKey.currentState?.validate() ?? false) {
                     formKey.currentState?.save();
+                    var value =
+                        int.parse(valueStr.replaceAll(RegExp(r'(\.|,)'), ''));
+
+                    if (operationType == OperationType.pay) {
+                      value = -1 * value;
+                    }
 
                     final newOperation = OperationModel(
                       clientId: widget.client.id!,
                       datetime: DateTime.now(),
-                      value: transactionType *
-                          int.parse(valueStr.replaceAll(RegExp(r'(\.|,)'), '')),
+                      value: value,
                     );
 
                     operationController.save(newOperation);
@@ -105,30 +117,6 @@ class _OperationAddPageState extends State<OperationAddPage> {
               )
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class CurrencyTextInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    final real = NumberFormat.currency(
-      locale: 'pt_BR',
-      name: '',
-      decimalDigits: 2,
-    );
-
-    final oldValueDouble = double.parse(newValue.text) * 0.01;
-    final newValueFormatted = real.format(oldValueDouble);
-
-    return TextEditingValue(
-      text: newValueFormatted,
-      selection: TextSelection.fromPosition(
-        TextPosition(
-          offset: newValueFormatted.length,
         ),
       ),
     );
