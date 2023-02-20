@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-import '../../../../controller/operation_controller.dart';
 import '../../../../model/operation_model.dart';
+import 'operation_popup_menu_button.dart';
 
 class OperationListTile extends StatelessWidget {
   const OperationListTile({super.key, required this.operation});
@@ -13,8 +12,6 @@ class OperationListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final operationController =
-        Provider.of<OperationController>(context, listen: false);
     final realFormatter = NumberFormat.currency(
       locale: 'pt_BR',
       name: '',
@@ -41,46 +38,9 @@ class OperationListTile extends StatelessWidget {
         children: [Text(title), Text(dateFormatted)],
       ),
       subtitle: Text(valueFormatted),
-      trailing: IconButton(
-        icon: const Icon(Icons.delete),
-        onPressed: () {
-          deleteConfirmationDialog(context).then((value) {
-            if (value ?? false) {
-              operationController.remove(operation);
-            }
-          });
-        },
+      trailing: OperationPopupMenuButton(
+        operation: operation,
       ),
     );
   }
-
-  Future<bool?> deleteConfirmationDialog(BuildContext context) async =>
-      await showDialog<bool?>(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Aviso'),
-            content: const Text('Deseja remover essa operação?'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-                child: Text(
-                  'Não',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.error,
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-                child: const Text('Sim'),
-              ),
-            ],
-          );
-        },
-      );
 }
