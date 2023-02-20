@@ -45,7 +45,7 @@ class OperationListTile extends StatelessWidget {
         icon: const Icon(Icons.delete),
         onPressed: () {
           deleteConfirmationDialog(context).then((value) {
-            if (value) {
+            if (value ?? false) {
               operationController.remove(operation);
             }
           });
@@ -54,8 +54,8 @@ class OperationListTile extends StatelessWidget {
     );
   }
 
-  Future<bool> deleteConfirmationDialog(BuildContext context) async =>
-      await showDialog(
+  Future<bool?> deleteConfirmationDialog(BuildContext context) async =>
+      await showDialog<bool?>(
         context: context,
         builder: (context) {
           return AlertDialog(
