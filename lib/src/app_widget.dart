@@ -49,7 +49,13 @@ class AppWidget extends StatelessWidget {
         initialRoute: '/client/list',
         routes: {
           '/client/list': (context) => const ClientListPageBuilder(),
-          '/client/add': (context) => const ClientAddPage(),
+          '/client/add': (context) {
+            final client =
+                ModalRoute.of(context)?.settings.arguments as ClientModel?;
+            return ClientAddPage(
+              client: client,
+            );
+          },
           '/operation/list': (context) {
             final client =
                 ModalRoute.of(context)!.settings.arguments as ClientModel;

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:developer' as dev;
 
 import '../../../../controller/client_controller.dart';
 import '../../../../model/client_model.dart';
@@ -23,7 +22,7 @@ class ClientPopupMenuButton extends StatelessWidget {
       onSelected: (value) {
         switch (value) {
           case PopupMenuOption.edit:
-            dev.log('não implementado');
+            Navigator.of(context).pushNamed('/client/add', arguments: client);
             break;
 
           case PopupMenuOption.remove:

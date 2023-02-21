@@ -5,7 +5,9 @@ import '../../../controller/client_controller.dart';
 import '../../../model/client_model.dart';
 
 class ClientAddPage extends StatefulWidget {
-  const ClientAddPage({super.key});
+  const ClientAddPage({super.key, this.client});
+
+  final ClientModel? client;
 
   @override
   State<ClientAddPage> createState() => _ClientAddPageState();
@@ -14,7 +16,13 @@ class ClientAddPage extends StatefulWidget {
 class _ClientAddPageState extends State<ClientAddPage> {
   final form = GlobalKey<FormState>();
   final clientController = GetIt.instance.get<ClientController>();
-  String name = '';
+  late ClientModel client;
+
+  @override
+  void initState() {
+    super.initState();
+    client = widget.client ?? const ClientModel(name: '');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +38,7 @@ class _ClientAddPageState extends State<ClientAddPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextFormField(
+                initialValue: client.name,
                 validator: (String? value) {
                   final pattern = RegExp(
                     r'^\p{L}+( \p{L}+)*$',
@@ -43,7 +52,8 @@ class _ClientAddPageState extends State<ClientAddPage> {
                   return 'Nome inválido';
                 },
                 onSaved: (String? newValue) {
-                  name = newValue!;
+                  client =
+                      client.copyWith(name: newValue!.trim().toUpperCase());
                 },
                 autofocus: true,
                 decoration: const InputDecoration(
@@ -59,9 +69,11 @@ class _ClientAddPageState extends State<ClientAddPage> {
                     onPressed: () {
                       if (form.currentState?.validate() ?? false) {
                         form.currentState?.save();
-                        final newClient =
-                            ClientModel(name: name.trim().toUpperCase());
-                        clientController.save(newClient);
+                        if (client.id == null) {
+                          clientController.save(client);
+                        } else {
+                          clientController.update(client);
+                        }
                         Navigator.of(context).pop<bool>(true);
                       }
                     },
