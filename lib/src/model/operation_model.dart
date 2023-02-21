@@ -42,4 +42,9 @@ class OperationModel {
       datetime: DateTime.fromMillisecondsSinceEpoch(map['datetime']),
     );
   }
+
+  @override
+  String toString() {
+    return 'Operation(id: $id, clientId: $clientId, value: $value, datetime: $datetime)';
+  }
 }

@@ -32,4 +32,9 @@ class ClientModel {
       balance: map['balance'],
     );
   }
+
+  @override
+  String toString() {
+    return 'Client(id: $id, name: $name, balance: $balance)';
+  }
 }
